@@ -2,8 +2,8 @@ import {PokemonService} from "./pokemonService.js"
 
 const pokemonService = new PokemonService();
 
-function inicializar () {
-    pokemonService.traerPagina().then(function(data){
+function inicializar (urlPasada) {
+    pokemonService.traerPagina(urlPasada).then(function(data){
         const pokemones = data.results
         const next = data.next
         const previous = data.previous
@@ -14,13 +14,32 @@ function inicializar () {
 function mostrarPokemones (pokemones, next, previous) {
     const div = document.getElementById("lista-pokemones")
     const lista = document.createElement("ul")
-    lista.setAttribute("id", "lista"); //ver para que era
+    lista.setAttribute("id", "lista");
     div.appendChild(lista)
 
+    const atras = document.createElement("button")
+    atras.setAttribute("id", "boton-atras");
+    atras.textContent = "pagina anterior"
+    div.appendChild(atras)
+    atras.onclick = function(){
+        console.log("mandar a link")
+        document.getElementById("lista").remove()
+        document.getElementById("boton-atras").remove()
+        document.getElementById("boton-siguiente").remove()
+        inicializar(previous)
+    };
+
     const siguiente = document.createElement("button")
-    siguiente.textContent = next
+    siguiente.setAttribute("id", "boton-siguiente");
+    siguiente.textContent = "Siguiente pagina"
     div.appendChild(siguiente)
-    // hacer handler del button
+    siguiente.onclick = function(){
+        console.log("mandar a link")
+        document.getElementById("lista").remove()
+        document.getElementById("boton-atras").remove()
+        document.getElementById("boton-siguiente").remove()
+        inicializar(next)
+    };
 
     for (let i = 0; i < pokemones.length; i++) {
         const item = document.createElement("li")
@@ -31,15 +50,6 @@ function mostrarPokemones (pokemones, next, previous) {
         anchor.href = pokemones[i].url
     }
 }
-
-const siguiente = document.getElementById("next")
-
-function botonSiguiente () {
-    console.log("apreto siguiente")
-    //const ul= document.getElementById("lista")
-    //ul.remove()
-}
-
 
 inicializar();
 
