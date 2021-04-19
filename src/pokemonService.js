@@ -8,6 +8,14 @@ export class PokemonService {
         })
         return jsonPromise;
     }
+
+    traerPokemon(url) {
+        const requestPromise = fetch(url);
+        const jsonPromise = requestPromise.then(function (response) {
+            return response.json()
+        })
+        return jsonPromise;
+    }
 }
 
 
